@@ -1,4 +1,4 @@
-package com.hemebiotech.analytics;
+package com.hemebiotech.dao;
 
 import java.util.List;
 
