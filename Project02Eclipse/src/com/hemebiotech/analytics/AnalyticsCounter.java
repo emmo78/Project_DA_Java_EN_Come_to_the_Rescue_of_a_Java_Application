@@ -1,17 +1,29 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import com.hemebiotech.control.AnalyticsController;
 
 public class AnalyticsCounter {
+	public static void main(String args[]) {
+		AnalyticsController controller = AnalyticsController.getInstance();
+		controller.run();
+	}
+	
+}
+
+
+
+
+
+/*public class AnalyticsCounter {
 	private static int headacheCount = 0;	// initialize to 0
 	private static int rashCount = 0;		// initialize to 0
 	private static int pupilCount = 0;		// initialize to 0
 	
 	public static void main(String args[]) throws Exception {
 		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
+		String path = System.getProperty("user.dir");
+		System.out.println(path);
+		BufferedReader reader = new BufferedReader (new FileReader(path+"/Project02Eclipse/symptoms.txt"));
 		String line = reader.readLine();
 
 		int i = 0;	// set i to 0
@@ -41,3 +53,4 @@ public class AnalyticsCounter {
 		writer.close();
 	}
 }
+*/
