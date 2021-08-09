@@ -3,6 +3,8 @@ package com.hemebiotech.dao;
 import java.io.IOException;
 import java.util.List;
 
+import com.hemebiotech.model.Occurence;
+
 /**
  * Anything that will read symptom data from a source
  * The important part is, the return value from the operation, which is a list of strings,
@@ -11,16 +13,23 @@ import java.util.List;
  * The implementation does not need to order the list
  * 
  */
-public interface ISymptomReader {
+public interface ISymptomIO {
 	/**
 	 * If no data is available, return an empty List
 	 * 
 	 * @return a raw listing of all Symptoms obtained from a data source, duplicates are possible/probable
 	 */
 	List<String> getSymptoms();
+	
+	/**
+	 * Write Occurence into a file.
+	 * 
+	 * @return a boolean true if success, false if an IOexception throwed
+	 */
+	boolean writeSymptoms(List<Occurence> listOfOcc);
 
 	/**
-	 * To close FileReader's instancce properly
+	 * To close FileIO's instancce properly
 	 * 	
 	 */
 	void close();

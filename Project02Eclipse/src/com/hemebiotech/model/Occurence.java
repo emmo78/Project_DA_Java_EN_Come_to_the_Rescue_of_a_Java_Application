@@ -13,15 +13,6 @@ public abstract class Occurence {
 	protected String name;
 	protected int number;
 
-	/**
-	 * @return the name
-	 */
-	public abstract String getName();
-
-	/**
-	 * @param name the name to set
-	 */
-	public abstract void setName(String name);
 
 	/**
 	 * @return the number
@@ -29,9 +20,9 @@ public abstract class Occurence {
 	public abstract int getNumber();
 
 	/**
-	 * @param number the number to set
+	 *  increment number by 1
 	 */
-	public abstract void setNumber(int number);
+	public abstract void incrementNumber();
 
 	/**
 	 * Test if name is equal case insensitive

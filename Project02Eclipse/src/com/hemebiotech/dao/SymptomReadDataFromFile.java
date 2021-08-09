@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hemebiotech.model.Occurence;
+
 /**
- * Simple brute force implementation
- *
+ * Read data from file into list implementation
+ * Close properly File reader
+ * @author olivier MOREL
  */
-public class ReadSymptomDataFromFile implements ISymptomReader {
+public class SymptomReadDataFromFile implements ISymptomIO {
 
 	private FileReader fileReader;
 
@@ -19,9 +22,8 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 	 * 
 	 * @param filepath a full or partial path to file with symptom strings in it,
 	 *                 one per line
-	 * @throws FileNotFoundException
 	 */
-	public ReadSymptomDataFromFile(String filePath) {
+	public SymptomReadDataFromFile(String filePath) {
 		try {
 			fileReader = new FileReader(filePath);
 		} catch (FileNotFoundException e) {
@@ -57,6 +59,12 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean writeSymptoms(List<Occurence> listOfOcc) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
