@@ -8,11 +8,8 @@ import java.util.List;
  *
  */
 public class AnalyticsView {
-	public void printExceptionThrowed(String exceptionMessage) {
-		System.out.println(exceptionMessage);
-	}
 	
 	public void showListedOccurencies(List<String> listOfOccurencies) {
-		listOfOccurencies.stream().forEach(occString -> System.out.println(occString));
+		listOfOccurencies.forEach(occString -> System.out.println(occString));
 	}
 }

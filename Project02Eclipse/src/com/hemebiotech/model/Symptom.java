@@ -8,23 +8,14 @@ public class Symptom extends Occurence {
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name.toLowerCase();
-	}
-
-	@Override
 	public int getNumber() {
 		return number;
 	}
 
 	@Override
-	public void setNumber(int number) {
-		this.number = number;
+	public void incrementNumber() {
+		this.number++;
+		
 	}
 
 	@Override
@@ -38,5 +29,4 @@ public class Symptom extends Occurence {
 	public String toString() {
 		return "Number of :"+name+" = "+number;
 	}
-
 }

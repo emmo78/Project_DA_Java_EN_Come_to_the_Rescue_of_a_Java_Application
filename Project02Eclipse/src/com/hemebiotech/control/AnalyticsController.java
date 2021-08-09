@@ -1,12 +1,14 @@
 package com.hemebiotech.control;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.hemebiotech.dao.ISymptomReader;
-import com.hemebiotech.dao.ReadSymptomDataFromFile;
+import com.hemebiotech.dao.ISymptomIO;
+import com.hemebiotech.dao.SymptomReadDataFromFile;
 import com.hemebiotech.model.Occurence;
+import com.hemebiotech.model.Symptom;
 import com.hemebiotech.view.AnalyticsView;
 
 /**
@@ -17,13 +19,12 @@ import com.hemebiotech.view.AnalyticsView;
  * @author olivier MOREL
  *
  */
-
 public final class AnalyticsController {
 	/**
 	 * instance is private to exercise access control
 	 */
 	private static AnalyticsController instance;
-	private AnalyticsView analyticsViewer = new AnalyticsView();
+	private AnalyticsView analyticsViewer;
 
 	private AnalyticsController() {
 	}
@@ -41,24 +42,49 @@ public final class AnalyticsController {
 	}
 
 	public void run() {
-		ISymptomReader reader = null;
+		analyticsViewer = new AnalyticsView();
+		ISymptomIO reader = null;
 		List<String> symptomsList = null;
+		List<Occurence> symptomsFreqList = new ArrayList<>();
 		final String userDir = System.getProperty("user.dir");
-		final String filePath = userDir + "/Project02Eclipse/symptoms.txt";
+		final String path = userDir + "/Project02Eclipse/";
+		final String fileToRead = "symptoms.txt";
+		final String fileToWrite = "result.out";
+		Iterator<String> iteratorSymptomsList;
+		Occurence oldSymptom = null;
+		Occurence newSymptom = null;
 
-		reader = new ReadSymptomDataFromFile(filePath);
+		reader = new SymptomReadDataFromFile(path + fileToRead);
 
 		if (reader == null)
 			System.exit(-1);
 
 		symptomsList = reader.getSymptoms();
+		reader.close();
 
-		if (symptomsList == null) {
-			reader.close();
+		if (symptomsList == null)
 			System.exit(-1);
+
+		symptomsList.sort(null);
+
+		iteratorSymptomsList = symptomsList.iterator();
+
+		if (iteratorSymptomsList.hasNext())
+			oldSymptom = new Symptom(iteratorSymptomsList.next());
+
+		while (iteratorSymptomsList.hasNext()) {
+			newSymptom = new Symptom(iteratorSymptomsList.next());
+			if (newSymptom.equals(oldSymptom)) {
+				oldSymptom.incrementNumber();
+			} else {
+				symptomsFreqList.add(oldSymptom);
+				oldSymptom = newSymptom;
+			}
 		}
 
-		analyticsViewer.showListedOccurencies(symptomsList);
+		symptomsFreqList.add(oldSymptom);
 
+		analyticsViewer.showListedOccurencies(
+				symptomsFreqList.stream().map(occ -> occ.toString()).collect(Collectors.toList()));
 	}
 }
