@@ -12,7 +12,7 @@ import com.hemebiotech.model.Occurence;
 /**
  * Read data from file into list implementation
  * Close properly File reader
- *
+ * @author olivier MOREL
  */
 public class SymptomReadDataFromFile implements ISymptomIO {
 

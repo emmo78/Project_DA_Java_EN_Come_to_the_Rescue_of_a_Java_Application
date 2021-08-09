@@ -24,7 +24,7 @@ public interface ISymptomIO {
 	/**
 	 * Write Occurence into a file.
 	 * 
-	 * @return a boolean true if success, false if an exception throwed
+	 * @return a boolean true if success, false if an IOexception throwed
 	 */
 	boolean writeSymptoms(List<Occurence> listOfOcc);
 

@@ -27,6 +27,6 @@ public class Symptom extends Occurence {
 
 	@Override
 	public String toString() {
-		return "Number of :"+name+" = "+number;
+		return "Number of : "+name+" = "+number+"\n";
 	}
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.hemebiotech.dao.ISymptomIO;
 import com.hemebiotech.dao.SymptomReadDataFromFile;
+import com.hemebiotech.dao.SymptomWriteDataToFile;
 import com.hemebiotech.model.Occurence;
 import com.hemebiotech.model.Symptom;
 import com.hemebiotech.view.AnalyticsView;
@@ -43,7 +44,7 @@ public final class AnalyticsController {
 
 	public void run() {
 		analyticsViewer = new AnalyticsView();
-		ISymptomIO reader = null;
+		ISymptomIO ioFile = null;
 		List<String> symptomsList = null;
 		List<Occurence> symptomsFreqList = new ArrayList<>();
 		final String userDir = System.getProperty("user.dir");
@@ -54,18 +55,18 @@ public final class AnalyticsController {
 		Occurence oldSymptom = null;
 		Occurence newSymptom = null;
 
-		reader = new SymptomReadDataFromFile(path + fileToRead);
+		ioFile = new SymptomReadDataFromFile(path + fileToRead); //Start bloc code to read data from file
 
-		if (reader == null)
+		if (ioFile == null)
 			System.exit(-1);
 
-		symptomsList = reader.getSymptoms();
-		reader.close();
+		symptomsList = ioFile.getSymptoms();
+		ioFile.close();
 
 		if (symptomsList == null)
 			System.exit(-1);
-
-		symptomsList.sort(null);
+		
+		symptomsList.sort(null); //Start bloc code to sort list into a set of symptoms with their frequencies
 
 		iteratorSymptomsList = symptomsList.iterator();
 
@@ -84,7 +85,22 @@ public final class AnalyticsController {
 
 		symptomsFreqList.add(oldSymptom);
 
-		analyticsViewer.showListedOccurencies(
-				symptomsFreqList.stream().map(occ -> occ.toString()).collect(Collectors.toList()));
+		try {
+			analyticsViewer.showListedOccurencies(
+				symptomsFreqList.stream().map(occ -> occ.toString()).collect(Collectors.toList())); //show result
+		} catch (NullPointerException e) {
+			analyticsViewer.showExceptionMessage("No Data in File");
+			System.exit(0);
+		}	
+
+		ioFile = new SymptomWriteDataToFile(path + fileToWrite); //Start bloc code to write data into a file
+
+		if (ioFile == null)
+			System.exit(-1);
+
+		if (ioFile.writeSymptoms(symptomsFreqList) == false)
+			System.exit(-1);
+
+		ioFile.close();
 	}
 }

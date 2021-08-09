@@ -11,8 +11,7 @@ import java.util.List;
 import com.hemebiotech.model.Occurence;
 
 /**
- * Write data from file into list implementation
- * Close properly File reader
+ * Write data from file into list implementation Close properly File reader
  *
  */
 public class SymptomWriteDataToFile implements ISymptomIO {
@@ -34,7 +33,7 @@ public class SymptomWriteDataToFile implements ISymptomIO {
 	@Override
 	public void close() {
 		try {
-			fileReader.close();
+			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -42,29 +41,22 @@ public class SymptomWriteDataToFile implements ISymptomIO {
 
 	@Override
 	public List<String> getSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
-		BufferedReader buffReader = new BufferedReader(fileReader);
-
-		String line;
-		try {
-			line = buffReader.readLine();
-			while (line != null) {
-				result.add(line);
-				line = buffReader.readLine();
-			}
-			buffReader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			result=null;
-		}
-
-		return result;
+		return null;
 	}
 
 	@Override
 	public boolean writeSymptoms(List<Occurence> listOfOcc) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean succes = true;
+
+		for (Occurence occ : listOfOcc) {
+			try {
+				fileWriter.write(occ.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+				succes = false;
+			}
+		}
+		return succes;
 	}
 
 }

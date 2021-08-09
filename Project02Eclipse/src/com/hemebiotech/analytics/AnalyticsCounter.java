@@ -10,10 +10,6 @@ public class AnalyticsCounter {
 	
 }
 
-
-
-
-
 /*public class AnalyticsCounter {
 	private static int headacheCount = 0;	// initialize to 0
 	private static int rashCount = 0;		// initialize to 0
