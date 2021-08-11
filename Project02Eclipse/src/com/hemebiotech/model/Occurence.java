@@ -13,7 +13,6 @@ public abstract class Occurence {
 	protected String name;
 	protected int number;
 
-
 	/**
 	 * @return the number
 	 */
@@ -26,8 +25,8 @@ public abstract class Occurence {
 
 	/**
 	 * Test if name is equal case insensitive
-	 * @param occ
-	 * @return boolean
+	 * @param occ is the object which name to test
+	 * @return true if the name are equals, false if not 
 	 */
 	public abstract boolean equals(Occurence occ);
 

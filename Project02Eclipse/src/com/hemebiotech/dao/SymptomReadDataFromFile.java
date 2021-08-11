@@ -18,34 +18,34 @@ public class SymptomReadDataFromFile implements ISymptomIO {
 
 	private FileReader fileReader;
 
-	/**
-	 * 
-	 * @param filepath a full or partial path to file with symptom strings in it,
-	 *                 one per line
+	/** 
+	 * Construtor
+	 * @param filePath a full or partial path to file with symptom strings in it, one per line
+	 * @param exceptionMessage is the pointer to the object to handle exception message                 
 	 */
-	public SymptomReadDataFromFile(String filePath) {
+	public SymptomReadDataFromFile(String filePath, StringBuilder exceptionMessage) {
 		try {
 			fileReader = new FileReader(filePath);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			exceptionMessage.append(e.getMessage()); //the  object is modified not the value of pointer
 		}
 	}
 
 	@Override
-	public void close() {
+	public void close(StringBuilder exceptionMessage) {
 		try {
 			fileReader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			exceptionMessage.append(e.getMessage());
 		}
 	}
 
 	@Override
-	public List<String> getSymptoms() {
+	public List<String> getSymptoms(StringBuilder exceptionMessage) {
 		ArrayList<String> result = new ArrayList<String>();
 		BufferedReader buffReader = new BufferedReader(fileReader);
-
 		String line;
+
 		try {
 			line = buffReader.readLine();
 			while (line != null) {
@@ -54,17 +54,12 @@ public class SymptomReadDataFromFile implements ISymptomIO {
 			}
 			buffReader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			result=null;
+			exceptionMessage.append(e.getMessage());
 		}
-
 		return result;
 	}
 
 	@Override
-	public boolean writeSymptoms(List<Occurence> listOfOcc) {
-		// TODO Auto-generated method stub
-		return false;
+	public void writeSymptoms(List<Occurence> listOfOcc, StringBuilder exceptionMessage) {
 	}
-
 }

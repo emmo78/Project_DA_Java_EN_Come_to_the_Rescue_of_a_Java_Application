@@ -26,6 +26,7 @@ public final class AnalyticsController {
 	 */
 	private static AnalyticsController instance;
 	private AnalyticsView analyticsViewer;
+	private StringBuilder exceptionMessage;// Declare a pointer to the object
 
 	private AnalyticsController() {
 	}
@@ -42,8 +43,12 @@ public final class AnalyticsController {
 		return instance;
 	}
 
+	/**
+	 * Contains controller logic
+	 */
 	public void run() {
 		analyticsViewer = new AnalyticsView();
+		exceptionMessage = new StringBuilder();// The pointer is initialized with the address of the object
 		ISymptomIO ioFile = null;
 		List<String> symptomsList = null;
 		List<Occurence> symptomsFreqList = new ArrayList<>();
@@ -55,24 +60,20 @@ public final class AnalyticsController {
 		Occurence oldSymptom = null;
 		Occurence newSymptom = null;
 
-		ioFile = new SymptomReadDataFromFile(path + fileToRead); //Start bloc code to read data from file
+		// Begin reading data from file
+		ioFile = new SymptomReadDataFromFile(path + fileToRead, exceptionMessage);// The pointer is transmitted and will not change
+		isExceptionOccur();// Test if the object pointed by exceptionMessage was modified
 
-		if (ioFile == null)
-			System.exit(-1);
+		symptomsList = ioFile.getSymptoms(exceptionMessage);
+		ioFile.close(exceptionMessage);
+		isExceptionOccur();
 
-		symptomsList = ioFile.getSymptoms();
-		ioFile.close();
+		symptomsList.sort(null); // Sort list in alpphabetical order
 
-		if (symptomsList == null)
-			System.exit(-1);
-		
-		symptomsList.sort(null); //Start bloc code to sort list into a set of symptoms with their frequencies
-
+		// Begin enumerating and create each symptom with their frequency
 		iteratorSymptomsList = symptomsList.iterator();
-
 		if (iteratorSymptomsList.hasNext())
 			oldSymptom = new Symptom(iteratorSymptomsList.next());
-
 		while (iteratorSymptomsList.hasNext()) {
 			newSymptom = new Symptom(iteratorSymptomsList.next());
 			if (newSymptom.equals(oldSymptom)) {
@@ -82,25 +83,34 @@ public final class AnalyticsController {
 				oldSymptom = newSymptom;
 			}
 		}
-
 		symptomsFreqList.add(oldSymptom);
 
+		// Show result
 		try {
 			analyticsViewer.showListedOccurencies(
-				symptomsFreqList.stream().map(occ -> occ.toString()).collect(Collectors.toList())); //show result
+					symptomsFreqList.stream().map(occ -> occ.toString()).collect(Collectors.toList()));
 		} catch (NullPointerException e) {
 			analyticsViewer.showExceptionMessage("No Data in File");
 			System.exit(0);
-		}	
+		}
 
-		ioFile = new SymptomWriteDataToFile(path + fileToWrite); //Start bloc code to write data into a file
+		// Begin writing data into a file
+		ioFile = new SymptomWriteDataToFile(path + fileToWrite, exceptionMessage);
+		isExceptionOccur();
 
-		if (ioFile == null)
+		ioFile.writeSymptoms(symptomsFreqList, exceptionMessage);
+		ioFile.close(exceptionMessage);
+		isExceptionOccur();
+	}
+
+	/**
+	 * Test if the object pointed by the pointer is modified (contains an exception
+	 * message)
+	 */
+	private void isExceptionOccur() {
+		if (exceptionMessage.length() != 0) {
+			analyticsViewer.showExceptionMessage(exceptionMessage.toString());
 			System.exit(-1);
-
-		if (ioFile.writeSymptoms(symptomsFreqList) == false)
-			System.exit(-1);
-
-		ioFile.close();
+		}
 	}
 }
