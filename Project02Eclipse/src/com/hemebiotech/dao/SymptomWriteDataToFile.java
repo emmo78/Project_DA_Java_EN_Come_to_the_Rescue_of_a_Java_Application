@@ -1,11 +1,7 @@
 package com.hemebiotech.dao;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.hemebiotech.model.Occurence;
@@ -18,45 +14,41 @@ public class SymptomWriteDataToFile implements ISymptomIO {
 
 	private FileWriter fileWriter;
 
-	/**
-	 * 
-	 * @param filepath a full or partial path to file to Write
+	/** 
+	 * Construtor
+	 * @param filePath is a full or partial path to file with symptom strings in it, one per line
+	 * @param exceptionMessage is the pointer to the object to handle exception message                 
 	 */
-	public SymptomWriteDataToFile(String filePath) {
+	public SymptomWriteDataToFile(String filePath, StringBuilder exceptionMessage) {
 		try {
 			fileWriter = new FileWriter(filePath);
 		} catch (IOException e) {
-			e.printStackTrace();
+			exceptionMessage.append(e.getMessage());
 		}
 	}
 
 	@Override
-	public void close() {
+	public void close(StringBuilder exceptionMessage) {
 		try {
 			fileWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			exceptionMessage.append(e.getMessage());
 		}
 	}
 
 	@Override
-	public List<String> getSymptoms() {
+	public List<String> getSymptoms(StringBuilder exceptionMessage) {
 		return null;
 	}
 
 	@Override
-	public boolean writeSymptoms(List<Occurence> listOfOcc) {
-		boolean succes = true;
-
+	public void writeSymptoms(List<Occurence> listOfOcc, StringBuilder exceptionMessage) {
 		for (Occurence occ : listOfOcc) {
 			try {
 				fileWriter.write(occ.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
-				succes = false;
+				exceptionMessage.append(e.getMessage());
 			}
 		}
-		return succes;
 	}
-
 }
